@@ -1,0 +1,449 @@
+#include<stdlib.h> // for clearing screen
+#include<iostream> // printf and scanf
+#include<conio.h> // getch
+#define PIN 2019 // declaration of pin
+
+using namespace std;
+
+int pass;
+int option;
+
+int get_pass(); // gettin' pin code
+int mainmenu_option(); // main menu display and option return
+void our_policy(); // our policy
+void clearscreen(); // system("CLS");
+
+main()
+{
+	int pin, j = 1 ,with_opt;  //user defined pin     j is for the loop
+	int a; //option to goto main menu or stop
+	unsigned long bal=1000000;  //balance
+	unsigned long q; //entered amount by user
+	unsigned long wuthdraw=0;  //withdrawal amount
+	int pass1, option;  //pass is the pin code user enters......option is the option chosen on main menu
+	
+	//following are self-declared water, nrg & gas bill amounts
+	int h2o = 1000;  // initiating bills  
+	int nrg = 5000;
+	int gas = 6000;		
+		
+	pass1 = get_pass();  // get pass is a user-defined function
+	
+	if(pass1==PIN)	
+	{
+		do
+		{
+			clearscreen();  /* clear screen */
+				
+			option = mainmenu_option();
+			
+			cout<<"\n";
+			/* in case option is incorrect loop will restart */
+			if(option<=0 && option > 8)
+			{
+				cout<<"\n Try Again.";  // the message
+				getch(); // a button click
+				continue; // restart loop
+			}
+						
+			while(option==1)
+			{ 				
+				clearscreen(); 
+				
+				if(bal==0) // in case there is no balance
+				{
+					cout<<"\n You have no balance ---- Balance = Rs 0 ";
+					getch();
+					continue;
+				}
+				
+				cout<<"\n\t\t\t\t ************ ";	
+				cout<<"\n\t\t\t\t  WITHDRAWAL  ";
+				cout<<"\n\t\t\t\t ************ ";
+				
+				cout<<"\n You chose \"Withdrawal\".";
+				
+				cout<<"\n Your current balance is Rs %lu.",bal;  //ye current balance
+				cout<<"\n Choose one of the following options : \n";
+				cout<<"\n 1 : Rs 15,000 ";
+				cout<<"\n 2 : Rs 10,000 ";
+				cout<<"\n 3 : Rs  5,000 ";
+				cout<<"\n 4 : Rs  2,500 ";
+				cout<<"\n 5 : Rs  1,500 ";
+				cout<<"\n 6 : Rs  1,000 ";
+				cout<<"\n 7 : Other\n\n\t";
+				cin>>with_opt;
+				
+				if( with_opt<1 || with_opt > 7)
+				{
+					cout<<"\n Invalid choice.";
+					getch();
+					continue;
+				}
+
+				switch(with_opt)
+				{
+					case 1: bal-=15000;  // chosen amounts deducted from balance
+					case 2: bal-=10000;
+					case 3: bal-= 5000;
+					case 4: bal-= 2500;
+					case 5: bal-= 1500;
+					case 6:	bal-= 1000;
+				}	
+			
+				if(with_opt==7)		// 'cus it dont work in switch
+				{	
+					clearscreen();
+					cout<<"\n Enter amount to withdraw from your account in rupees :  "; // amount ot withdraw
+					cin>>wuthdraw;
+			
+					while( wuthdraw > bal || wuthdraw < 0 )  // prompting user to enter withdraw amount until it is correct
+					{
+						clearscreen();
+						cout<<"\n Invalid amount entered."; // ERROR 404
+						cout<<"\n Your current balance is Rs "<<bal<<".";
+						cout<<"\n Enter amount to withdraw from your account in rupees :  ";
+						cin>>wuthdraw;
+					}
+					
+					bal -= wuthdraw;  // subtracting from balance
+					clearscreen();  //here
+				}	
+						
+				cout<<"\n You successfully withdrawed the amount. WOW!";
+				cout<<"\n  Remaining balance : Rs "<<bal<<".";
+				getch();
+				break;				
+			}
+			
+			if(option==2)// check balance from here
+			{
+				clearscreen(); //here
+				
+				cout<<"\n\t\t\t\t *************** ";	
+				cout<<"\n\t\t\t\t  CHECK BALANCE  ";
+				cout<<"\n\t\t\t\t *************** ";
+				
+				cout<<"\n You chose \"Check Balance\".";
+				
+				cout<<"\n Your current balance is Rs "<<bal<<".";  // shows you current balance
+
+				getch();
+				continue;
+			}
+			
+			else if(option==3)
+			{
+				unsigned long dep;  // deposit amount
+				clearscreen();
+				
+				cout<<"\n\t\t\t\t ************** ";	
+				cout<<"\n\t\t\t\t  CASH DEPOSIT  ";
+				cout<<"\n\t\t\t\t ************** ";
+				
+				cout<<"\n You chose \"Deposit Amount\".";
+				
+				cout<<"\n Your current balance is Rs "<<bal<<".";
+				cout<<"\n Enter Amount To Deposit in rupees :  ";
+				cin>>dep ; // unlimited deposits into your account!!
+				
+				bal += dep;
+				
+				cout<<"\n Your New Balance is Rs %lu",bal;
+				getch();
+				continue;		
+			}
+			
+			else if(option==4) // bill payment
+			{
+				do
+				{
+					if( h2o==0 && gas==0 && nrg==0 )
+					{
+					    clearscreen();
+						cout<<"\n You\'ve already paid all your bills, man. ";
+						getch();
+						break;  // back to main menu
+					}
+					
+					if(bal==0)
+					{
+						clearscreen();
+						cout<<"\n You don\'t have any balance.";
+						getch();
+						break;
+					}
+					
+					clearscreen(); // need to place a loop here
+					
+					cout<<"\n\t\t\t\t ************** ";	
+					cout<<"\n\t\t\t\t  BILL PAYMENT  ";
+					cout<<"\n\t\t\t\t ************** ";
+					cout<<"\n You chose \"Bill Payment\" ";
+						
+					int w; // option
+		
+					// if any of the following is already paid i.e. zero...................loop will continue
+					clearscreen(); //here							 
+					cout<<"\n Choose bill";
+					cout<<"\n 1.Water";
+					cout<<"\n 2.Electricity";
+					cout<<"\n 3.Gas\n\n		: ";
+					cin>>w;
+					
+					if (w==1)
+					{	
+						clearscreen();  //here
+						
+						if(h2o==0)  // no bill no payment
+						{
+							cout<<"\n You have already paid the water bill.";
+							getch();
+							continue;
+						}
+						
+						cout<<"\n You chose to pay the Water bill";
+				
+						do
+						{
+							clearscreen();
+							cout<<"\n Your water bill this month is Rs "<<h2o<<".";
+							cout<<"\n Enter amount to pay in rupees :";
+							cin>>q;                                
+						}
+						while(q>bal||q>h2o);
+						
+						if( q<=bal && q<=h2o )
+						{
+							bal -= q;
+							h2o -= q;
+							
+							system("CLS");  //here
+							cout<<"\n You have successfully paid your water bill.";
+							cout<<"\n Your current balance is Rs "<<bal<<".";
+							getch();
+						}
+					}
+					
+					else if(w==2)
+					{	
+						clearscreen();  //here
+					
+						if( nrg == 0 )
+						{
+							cout<<"\n You have already paid the electricity bill.";
+							getch();
+							continue;
+						}
+
+					 	do
+						{
+							cout<<"\n Your electricity bill this month is Rs "<<nrg<<".";
+							cout<<"\n Enter amount to pay in rupees :";
+							cin>>q;
+							
+							if(q>bal)// if greater than balance
+							{
+								cout<<"\n Invalid amount.";
+								getch();
+							}
+							
+							if(q==bal)
+								break;		
+						}
+						while(q>bal||q>nrg);
+						
+						if ( q<=bal && q<=nrg )
+						{
+							bal -= q;
+							nrg -= q;
+							
+							clearscreen();  //here
+							cout<<"\n You have successfully paid your electricity bill.";
+							getch();
+						}	
+				 	}	
+					
+					else if(w==3)
+					{
+						clearscreen();  //here	
+					
+						if( gas == 0 )
+						{
+							cout<<"\n You have already paid the gas bill.";
+							getch();
+							continue;
+						}
+					
+						cout<<"\n You chose to pay the gas bill";
+					
+						do
+						{
+							cout<<"\n Your water bill this month is Rs "<<gas<<".";
+							cout<<"\n Enter amount to pay in rupees :";
+							cin>>q;
+							
+							if(q>bal)
+							{
+								cout<<"\n Invalid amount.";
+								getch();
+							}		
+						}
+						while(q>bal||q>gas);
+						
+						if( q<=bal && q<=gas )
+						{
+							clearscreen();  //here
+							bal -= q;
+							gas -= q;
+							cout<<"\n You have successfully paid your gas bill.";
+							cout<<"\n\n Your current balance is Rs "<<bal<<".";
+							getch();
+						}
+					}
+					
+					cout<<"\n\n Press 1 to return to main menu. \n Press 0 to return to bill menu. \n";
+					
+					cin>>a;
+					
+					if (a==1)
+						break;
+					
+					else if( a==0 )
+						continue;
+					
+					else
+						break;				
+				}
+				while(j==1);
+			}
+			
+			else if(option==5)
+			{
+				clearscreen();  
+					
+				cout<<"\n\t\t\t\t **************** ";	
+				cout<<"\n\t\t\t\t  HELP & SUPPORT  ";
+				cout<<"\n\t\t\t\t **************** ";
+				cout<<"\n You chose\"Help and Support\"";
+				cout<<"\n Hi! We do not care about your needs at all. We just made this program for fun. But.....\n we didn\'t say we won\'t help you!!:";
+				cout<<"\n 1. Contact us at our e-mail. ( etched on top on the Eiffel Tower...I think )";
+				cout<<"\n 2. Contact us at our phone numbers, 090078601, 123456789, 1-800-PROGRAM ";
+				cout<<"\n 3. We have website!! www.absolutely_fake_site.com ";
+				getch();
+				continue;	
+			}
+			
+			else if(option==6)
+			{
+				our_policy();
+				getch();
+				continue;
+			}
+			
+			else if(option==7)
+			{
+				clearscreen();
+				cout<<"\n\n\t Enter new PIN => ";
+				cin>>pin;
+				
+				int pin2; // to verify
+				clearscreen();
+				cout<<"\n\n\t Enter new PIN again => ";
+				cin>>pin2;
+					
+				if( pin2 == pin )
+				{
+					clearscreen();
+					cout<<"\n You successfully changed your password! ";
+					getch();
+					continue;
+				}
+				
+				else
+				{
+					clearscreen();
+					cout<<"\n Wrong password entered. You lost your card permanently.  :-( ";
+					break;
+				}
+			}		
+			
+			else if(option==8)
+			{
+				clearscreen();
+				break;		  // if user enters 8 program, will end
+			}
+		}
+		while();		
+	}
+	
+	else 		//enter else number?????? for number besides 123456	
+		cout<<"\n\n\n\a\a\a		Sorry you entered the wrong PIN thrice....contact us for further support.";
+
+	cout<<"\n\n\n\a\a\a				Thank You For Using Our Services				\n\n\n\a\a\a";
+	
+	getch(); // EndOfDays
+}
+//function
+void clearscreen()
+{
+	system("CLS"); // sheeshtum
+}
+
+int get_pass()
+{
+	for( int k=1 ; k<=3 && pass != PIN ; ++k )			// three strikes for incorrect pin
+	{
+		clearscreen(); // clear screen 
+		cout<<"\n\t\t *       *  *********  *          *********  *********  *       *  *********"; // huge welcome sign
+		cout<<"\n\t\t *       *  *          *          *          *       *  * *   * *  *        ";
+		cout<<"\n\t\t *       *  *          *          *          *       *  *   *   *  *        ";
+		cout<<"\n\t\t *   *   *  *********  *          *          *       *  *   *   *  *********";
+		cout<<"\n\t\t *   *   *  *          *          *          *       *  *       *  *        ";
+		cout<<"\n\t\t * *   * *  *          *          *          *       *  *       *  *        ";
+		cout<<"\n\t\t *       *  *********  *********  *********  *********  *       *  *********";
+		
+		cout<<"\n\n\n\t\t\t Enter your PIN (HINT : It's a bit like this XXXX) \n\n\t\t\t\t\t\t ";  //prompting user to enter his/her pin code
+		cin>>pass;
+		
+		if( pass==PIN )
+			break; // if pass==PIN loop will end, returning pass
+		
+		else
+			cout<<"\n Incorrect PIN!";	
+	}
+
+	return pass;
+}
+// function
+int mainmenu_option()
+{
+	cout<<"\n\t\t\t\t *********** ";	
+	cout<<"\n\t\t\t\t  MAIN MENU  ";
+	cout<<"\n\t\t\t\t *********** \n";
+	cout<<"\n\t\t\t 1: Withdrawal";  // take out cash							
+	cout<<"\n\t\t\t 2: Check Balance"; 
+	cout<<"\n\t\t\t 3: Deposit Amount";				
+	cout<<"\n\t\t\t 4: Bill Payment";	
+	cout<<"\n\t\t\t 5: Help & Support";
+	cout<<"\n\t\t\t 6: Policy for our bank";
+	cout<<"\n\t\t\t 7: Change your PIN code";
+	cout<<"\n\t\t\t 8: Withdraw card\n";
+	
+	cout<<"\n\t Choose your option ( 1 to 8 ) : ";
+	cin>>option;
+	return option;													
+}					
+//function
+void our_policy()
+{
+	clearscreen();  //here
+	cout<<"\n\t\t\t\t ************ ";	
+	cout<<"\n\t\t\t\t  OUR POLICY  ";
+	cout<<"\n\t\t\t\t ************ ";
+	cout<<"\n You chose \"Policy for our bank\" ";
+	cout<<"\n (1) You can withdraw any amount you like if you enter a trillion dollars in deposit.";
+	cout<<"\n (2) Pay your bills every month on time.\n (3) We won\'t help you get stolen cards or cash back.";
+	cout<<"\n (3) Seriously, who reads \'Terms and Conditions\'\? Probably a huge nerd with huge glasses and LOTS of time to spare.";
+	cout<<"\n (4) One more thing ---- What\'s the difference between our policy and \'Help and Support\' \?\?";	
+}
